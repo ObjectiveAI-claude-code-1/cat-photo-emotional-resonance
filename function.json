@@ -1,0 +1,148 @@
+{
+  "type": "scalar.function",
+  "input_schema": {
+    "type": "object",
+    "description": "A cat photograph to be evaluated for the genuine emotional resonance of its captured moment.",
+    "properties": {
+      "cat_photo": {
+        "type": "image",
+        "description": "A photograph of a cat to evaluate. The image may be of any quality, format, or style — from polished studio portraits to blurry phone captures. It may include captions, filters, overlaid text, or other embellishments, or it may arrive unadorned. The function evaluates the emotional power of the moment captured within the image, not the technical quality of the photograph itself."
+      }
+    },
+    "required": [
+      "cat_photo"
+    ]
+  },
+  "tasks": [
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "$jmespath": "input.cat_photo"
+            },
+            {
+              "type": "text",
+              "text": "I'm curating a collection of photographs that capture genuine, unscripted cat moments — the kind where something real and spontaneous happened and someone was there to capture it. Would this photo belong in that collection?"
+            }
+          ]
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "Absolutely — this photograph captures something real and spontaneous. You can feel the authenticity of the moment; it's the kind of unrepeatable instant that can't be staged or summoned on command. This belongs in your collection."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "It's borderline. There are hints of a genuine moment, but it also feels somewhat ordinary or possibly arranged. I'm not fully convinced something truly spontaneous was captured here."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "I wouldn't include this one. The image feels generic, staged, or empty of any particular moment. Nothing here speaks to a genuine, unscripted instant worth preserving."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output[\"scores\"][0] * 1.0 + output[\"scores\"][1] * 0.5 + output[\"scores\"][2] * 0.0"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "developer",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are an art critic evaluating photographs purely on the immediate emotional response they provoke from their visual content alone. Ignore any captions, overlaid text, or narrative framing. Focus only on what is pictured and how it makes you feel in the instant of seeing it."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "$jmespath": "input.cat_photo"
+            },
+            {
+              "type": "text",
+              "text": "Describe your immediate emotional response to this photograph."
+            }
+          ]
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "This image hits me immediately — there's an involuntary rush of warmth and tenderness that arrives before I can even begin to analyze why. The feeling is visceral, unmistakable, and needs no explanation. This photograph does its own emotional work beautifully."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "I feel a mild pleasantness looking at this, but the emotional response is gentle rather than striking. It's agreeable enough, though it doesn't produce a strong or immediate feeling purely on its own."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Honestly, I feel very little looking at this image by itself. It's emotionally flat — I would need a caption, backstory, or some additional context to feel something meaningful about what I'm seeing here."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output[\"scores\"][0] * 1.0 + output[\"scores\"][1] * 0.5 + output[\"scores\"][2] * 0.0"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "$jmespath": "input.cat_photo"
+            },
+            {
+              "type": "text",
+              "text": "Look at this cat photo. Mentally strip away any captions, filters, overlaid text, borders, heavy color grading, or other post-capture additions. Focusing only on the underlying moment that was actually captured, how would you describe what remains?"
+            }
+          ]
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "What remains is a photograph that stands entirely on its own. The emotional power of this image lives in the captured moment itself — it needs no embellishment, and no amount of added packaging could improve upon what is already here. The moment is complete."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "There's a decent moment underneath, though some of the image's appeal seems tied to how it has been presented. The moment carries some resonance on its own, but the packaging appears to be doing part of the emotional work."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Without the embellishments, there isn't much left to feel. The underlying image is flat and unremarkable — whatever emotional response this photo produces is manufactured by what was added after the fact, not by the moment itself."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output[\"scores\"][0] * 1.0 + output[\"scores\"][1] * 0.5 + output[\"scores\"][2] * 0.0"
+      }
+    }
+  ],
+  "description": "Scores a cat photograph for the genuine emotional resonance of its captured moment. Evaluates whether the image's emotional power arises from what is actually happening in the picture or from artificial packaging layered on top. Assesses moment authenticity, emotional immediacy, and independence from embellishment."
+}
